@@ -1,38 +1,82 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Contenedor principal */
+.login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: 100vh;
+  background-image: url('./assets/ATR-20240904T142512Z-001/libros.jpg'); /* Ruta a la imagen */
+  background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+/* Imagen del perfil */
+.profile-picture img {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%; /* Redondea la imagen para hacerla circular */
+  margin-bottom: 20px; /* Espacio debajo de la imagen */
+  background-color: rgba(0, 0, 0, 0); /* Fondo transparente */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Sombra ajustada para una mejor visibilidad */
+}
+
+/* Formulario de inicio de sesión */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 350px; /* Ajustado para un tamaño más equilibrado */
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px; /* Bordes más redondeados */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Sombra más suave */
+}
+
+/* Espaciado entre grupos de formulario */
+.form-group {
+  margin-bottom: 20px; /* Espacio más amplio entre campos */
+}
+
+/* Estilo de las etiquetas de los campos de formulario */
+.form-group label {
+  margin-bottom: 8px; /* Espacio debajo de la etiqueta */
+  margin-top: 5px;
+  margin-left: 5px; /* Espacio a la izquierda de la etiqueta */
+  font-weight: bold;
+}
+
+/* Estilo de los campos de entrada */
+.form-group input {
+  width: calc(100% - 20px); /* Ajusta el ancho para tener en cuenta los márgenes */
+  padding: 6px; /* Espacio interno aumentado */
+  font-size: 15px; /* Tamaño de fuente más grande para mejor legibilidad */
+  border: 1px solid #575252; /* Color del borde */
+  border-radius: 5px; /* Bordes redondeados */
+  margin-left: 2px; /* Espacio a la izquierda del campo */
+  margin-right: 5px; /* Espacio a la derecha del campo */
+}
+
+/* Estilo de los botones */
+button {
+  padding: 12px; /* Espacio interno aumentado */
+  font-size: 18px; /* Tamaño de fuente más grande */
   color: white;
+  background-color: #751C1C; /* Color de fondo */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Comic Sans', sans-serif; /* Fuente de los botones */
 }
 
-.App-link {
-  color: #61dafb;
+/* Estilo específico para el botón de registro */
+.signup-button {
+  margin-top: 20px; /* Espacio más amplio arriba del botón */
+  background-color: #000000; /* Color de fondo */
+  font-family: 'Comic Sans', sans-serif; /* Fuente específica */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
 }
