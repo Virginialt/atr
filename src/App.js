@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import './App.css';
 import profilePic from './assets/ATR-20240904T142512Z-001/einstein.png'; // Importa la imagen
 
@@ -8,7 +7,6 @@ function App() {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate(); // Usa useNavigate para redirigir
 
   const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
@@ -22,11 +20,9 @@ function App() {
       return;
     }
     setEmailError('');
+    // Aquí iría la lógica de autenticación
+    // Si la autenticación es exitosa:
     setIsLoggedIn(true);
-  };
-
-  const handleRegisterClick = () => {
-    navigate('/register'); // Redirige a la página de registro
   };
 
   if (isLoggedIn) {
@@ -43,20 +39,9 @@ function App() {
 
   return (
     <div className="login-container">
-      {/* Contenedor del encabezado y el botón */}
-      <div className="header-container">
-        {/* Botón de registro encima del encabezado */}
-        <button className="signup-button" onClick={handleRegisterClick}>Registrarse</button>
-        {/* Encabezado */}
-        <div className="header"></div>
-      </div>
-
-      {/* Imagen de perfil */}
       <div className="profile-picture">
         <img src={profilePic} alt="Profile" /> {/* Usa la imagen importada */}
       </div>
-
-      {/* Formulario de inicio de sesión */}
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Gmail:</label>
@@ -83,6 +68,7 @@ function App() {
         </div>
         <button type="submit">Iniciar Sesión</button>
       </form>
+      <button className="signup-button">Registrarse</button>
     </div>
   );
 }

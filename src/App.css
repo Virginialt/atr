@@ -1,10 +1,3 @@
-/* Restablecer márgenes por defecto */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
 /* Contenedor principal */
 .login-container {
   display: flex;
@@ -16,43 +9,6 @@ html, body {
   background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
   background-position: center; /* Centra la imagen */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
-}
-
-/* Contenedor para el encabezado y el botón */
-.header-container {
-  width: 100%; /* Ocupa todo el ancho del contenedor */
-  position: relative; /* Posiciona el contenedor de forma relativa */
-  padding: 0; /* Asegúrate de que no haya relleno adicional */
-  margin: 0; /* Elimina cualquier margen adicional */
-}
-
-/* Encabezado que ocupa todo el ancho */
-.header {
-  width: 100%; /* Ocupa todo el ancho del contenedor */
-  background-color: #751C1C; /* Color de fondo #751C1C */
-  padding: 30px; /* Espaciado interno */
-  box-sizing: border-box; /* Incluye el padding y border en el ancho total */
-  margin: 0; /* Asegúrate de que no haya margen adicional */
-  position: fixed; /* Fija el encabezado en la parte superior de la pantalla */
-  top: 0; /* Posición desde el borde superior */
-  left: 0; /* Posición desde el borde izquierdo */
-  z-index: 1000; /* Asegúrate de que el encabezado esté debajo del botón de registro */
-}
-
-/* Botón de registro */
-.signup-button {
-  position: absolute; /* Posiciona el botón de forma absoluta */
-  top: -55px; /* Espacio desde la parte superior */
-  right: 10px; /* Espacio desde la derecha */
-  padding: 10px 20px; /* Ajuste de los márgenes internos */
-  background-color: #751C1C; /* Color de fondo */
-  color: white;
-  font-size: 16px; /* Tamaño de la fuente */
-  font-family: 'Open Sans', sans-serif; /* Fuente específica */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  z-index: 2000; /* Asegúrate de que el botón esté por encima del encabezado */
 }
 
 /* Imagen del perfil */
@@ -87,8 +43,6 @@ html, body {
   margin-top: 5px;
   margin-left: 5px; /* Espacio a la izquierda de la etiqueta */
   font-weight: bold;
-  font-family: 'Open Sans', sans-serif; /* Cambia la fuente aquí */
-  font-size: 16px; /* Tamaño de fuente opcional */
 }
 
 /* Estilo de los campos de entrada */
@@ -111,10 +65,16 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-family: 'Open Sans', sans-serif; /* Fuente de los botones */
+  font-family: 'Comic Sans', sans-serif; /* Fuente de los botones */
 }
 
-/* Estilo para el manejo de errores */
+/* Estilo específico para el botón de registro */
+.signup-button {
+  margin-top: 20px; /* Espacio más amplio arriba del botón */
+  background-color: #000000; /* Color de fondo */
+  font-family: 'Comic Sans', sans-serif; /* Fuente específica */
+}
+
 .error {
   color: red;
   font-size: 0.9em;
