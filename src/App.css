@@ -4,7 +4,38 @@ html, body {
   padding: 0;
   height: 100%;
 }
+/* Contenedor para el encabezado y el botón */
+.header-container {
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  position: relative; /* Posiciona el contenedor de forma relativa */
+  padding: 0; /* Asegúrate de que no haya relleno adicional */
+  margin: 0; /* Elimina cualquier margen adicional */
+}
 
+
+/* Ajustes del encabezado */
+.header {
+  width: 100%;
+  background-color: #751C1C;
+  padding: 8px;
+  box-sizing: border-box;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex; /* Flexbox para alinear la imagen */
+  align-items: center;
+}
+
+/* Imagen dentro del encabezado */
+.header-logo {
+  margin-top:'2px';
+  left: 60px;
+  width: 200px; /* Ajusta el tamaño de la imagen según lo necesites */
+  height: auto;
+}
 /* Contenedor principal */
 .login-container {
   display: flex;
@@ -17,28 +48,6 @@ html, body {
   background-position: center; /* Centra la imagen */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
-
-/* Contenedor para el encabezado y el botón */
-.header-container {
-  width: 100%; /* Ocupa todo el ancho del contenedor */
-  position: relative; /* Posiciona el contenedor de forma relativa */
-  padding: 0; /* Asegúrate de que no haya relleno adicional */
-  margin: 0; /* Elimina cualquier margen adicional */
-}
-
-/* Encabezado que ocupa todo el ancho */
-.header {
-  width: 100%; /* Ocupa todo el ancho del contenedor */
-  background-color: #751C1C; /* Color de fondo #751C1C */
-  padding: 30px; /* Espaciado interno */
-  box-sizing: border-box; /* Incluye el padding y border en el ancho total */
-  margin: 0; /* Asegúrate de que no haya margen adicional */
-  position: fixed; /* Fija el encabezado en la parte superior de la pantalla */
-  top: 0; /* Posición desde el borde superior */
-  left: 0; /* Posición desde el borde izquierdo */
-  z-index: 1000; /* Asegúrate de que el encabezado esté debajo del botón de registro */
-}
-
 /* Botón de registro */
 .signup-button {
   position: absolute; /* Posiciona el botón de forma absoluta */
@@ -62,7 +71,6 @@ html, body {
   border-radius: 50%; /* Redondea la imagen para hacerla circular */
   margin-bottom: 20px; /* Espacio debajo de la imagen */
   background-color: rgba(0, 0, 0, 0); /* Fondo transparente */
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Sombra ajustada para una mejor visibilidad */
 }
 
 /* Formulario de inicio de sesión */

@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import './App.css';
+import Bienvenido from './components/Bienvenido'
+import Inicio from './components/Inicio';
 import profilePic from './assets/ATR-20240904T142512Z-001/einstein.png'; // Importa la imagen
+import logo from './assets/ATR-20240904T142512Z-001/logoatr.png'; // Asegúrate de que la ruta sea correcta
 
 function App() {
   const [email, setEmail] = useState('');
@@ -9,7 +12,7 @@ function App() {
   const [emailError, setEmailError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate(); // Usa useNavigate para redirigir
-
+  
   const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
@@ -29,14 +32,15 @@ function App() {
     navigate('/register'); // Redirige a la página de registro
   };
 
-  if (isLoggedIn) {
+  if (isLoggedIn) { 
     return (
-      <div className="welcome-container">
-        <h1>¡Bienvenido/a de nuevo!</h1>
-        <div className="buttons">
-          <button>Resúmenes</button>
-          <button>Comunidad</button>
-        </div>
+      <div className="App">
+        {isLoggedIn ? (
+          <Bienvenido />
+        ) : (
+          <Inicio setIsLoggedIn={setIsLoggedIn} />
+        )}
+      
       </div>
     );
   }
@@ -48,7 +52,9 @@ function App() {
         {/* Botón de registro encima del encabezado */}
         <button className="signup-button" onClick={handleRegisterClick}>Registrarse</button>
         {/* Encabezado */}
-        <div className="header"></div>
+        <div className="header">
+         <img src={logo} alt="Logo ATR" className="header-logo" />
+      </div>
       </div>
 
       {/* Imagen de perfil */}
