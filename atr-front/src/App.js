@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import './App.css';
+import Bienvenido from './components/Bienvenido'
+import Inicio from './components/Inicio';
 import profilePic from './assets/ATR-20240904T142512Z-001/einstein.png'; // Importa la imagen
+import logo from './assets/ATR-20240904T142512Z-001/logoatr.png'; // Asegúrate de que la ruta sea correcta
 
 function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const navigate = useNavigate(); // Usa useNavigate para redirigir
+  
   const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
@@ -20,28 +25,44 @@ function App() {
       return;
     }
     setEmailError('');
-    // Aquí iría la lógica de autenticación
-    // Si la autenticación es exitosa:
     setIsLoggedIn(true);
   };
 
-  if (isLoggedIn) {
+  const handleRegisterClick = () => {
+    navigate('/register'); // Redirige a la página de registro
+  };
+
+  if (isLoggedIn) { 
     return (
-      <div className="welcome-container">
-        <h1>¡Bienvenido/a de nuevo!</h1>
-        <div className="buttons">
-          <button>Resúmenes</button>
-          <button>Comunidad</button>
-        </div>
+      <div className="App">
+        {isLoggedIn ? (
+          <Bienvenido />
+        ) : (
+          <Inicio setIsLoggedIn={setIsLoggedIn} />
+        )}
+      
       </div>
     );
   }
 
   return (
     <div className="login-container">
+      {/* Contenedor del encabezado y el botón */}
+      <div className="header-container">
+        {/* Botón de registro encima del encabezado */}
+        <button className="signup-button" onClick={handleRegisterClick}>Registrarse</button>
+        {/* Encabezado */}
+        <div className="header">
+         <img src={logo} alt="Logo ATR" className="header-logo" />
+      </div>
+      </div>
+
+      {/* Imagen de perfil */}
       <div className="profile-picture">
         <img src={profilePic} alt="Profile" /> {/* Usa la imagen importada */}
       </div>
+
+      {/* Formulario de inicio de sesión */}
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Gmail:</label>
@@ -68,7 +89,6 @@ function App() {
         </div>
         <button type="submit">Iniciar Sesión</button>
       </form>
-      <button className="signup-button">Registrarse</button>
     </div>
   );
 }

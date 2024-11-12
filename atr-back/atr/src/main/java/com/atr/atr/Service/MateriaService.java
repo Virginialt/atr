@@ -43,7 +43,7 @@ public class MateriaService implements IMateria {
     @Override
     public MateriaDto obtenerMateriaPorId(Long id) {
         Materia materia = materiaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("La materia con ID " + id + " no fue encontrada"));
+            .orElseThrow(() -> new MateriaNoEncontradaException(id));
         return materiaMapper.toDto(materia);
     }
 
@@ -60,7 +60,7 @@ public class MateriaService implements IMateria {
     @Transactional
     public MateriaDto actualizarMateria(Long id, MateriaDto materiaDto) {
         Materia materiaExistente = materiaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("La materia con ID " + id + " no fue encontrada"));
+            .orElseThrow(() -> new MateriaNoEncontradaException(id));
 
         materiaExistente.setNombre(materiaDto.getNombre());
         
@@ -72,7 +72,7 @@ public class MateriaService implements IMateria {
     @Transactional
     public void eliminarMateria(Long id) {
         Materia materiaExistente = materiaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("La materia con ID " + id + " no fue encontrada"));
+            .orElseThrow(() -> new MateriaNoEncontradaException(id));
 
         materiaExistente.setActivo(false); // Cambia el estado a inactivo en lugar de eliminar
         materiaRepository.save(materiaExistente);
@@ -87,7 +87,7 @@ public class MateriaService implements IMateria {
             materia.setActivo(true); // Restablecer el estado a activo
             materiaRepository.save(materia);
         } else {
-            throw new RuntimeException("La materia con ID " + id + " no fue encontrada");
+            throw new MateriaNoEncontradaException(id);
         }
     }
 

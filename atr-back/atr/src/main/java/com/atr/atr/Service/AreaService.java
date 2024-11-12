@@ -43,7 +43,7 @@ public class AreaService implements IArea {
     @Override
     public Optional<AreaDto> obtenerAreaPorId(Long id) {
         Area area = areaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("El área con ID " + id + " no fue encontrada"));
+            .orElseThrow(() -> new AreaNoEncontradaException(id));
         return Optional.of(areaMapper.toDto(area));
     }
 
@@ -60,7 +60,7 @@ public class AreaService implements IArea {
     @Transactional
     public AreaDto actualizarArea(Long id, AreaDto areaDto) {
         Area areaExistente = areaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("El área con ID " + id + " no fue encontrada"));
+            .orElseThrow(() -> new AreaNoEncontradaException(id));
         
         areaExistente.setNombre(areaDto.getNombre());
         areaExistente.setNivel(Area.Nivel.valueOf(areaDto.getNivel()));
@@ -74,7 +74,7 @@ public class AreaService implements IArea {
     @Transactional
     public void eliminarArea(Long id) {
         Area areaExistente = areaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("El área con ID " + id + " no fue encontrada"));
+            .orElseThrow(() -> new AreaNoEncontradaException(id));
         
         areaExistente.asEliminar(); // Llamar al método para establecer estado a ELIMINADA
         areaRepository.save(areaExistente);
@@ -84,7 +84,7 @@ public class AreaService implements IArea {
     @Transactional
     public Optional<AreaDto> restaurarArea(Long id) {
         Area area = areaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("El área con ID " + id + " no fue encontrada"));
+            .orElseThrow(() -> new AreaNoEncontradaException(id));
         
         area.setEstado(Area.Estado.ACTIVA);
         area = areaRepository.save(area);
