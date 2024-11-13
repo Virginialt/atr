@@ -43,7 +43,7 @@ html, body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-image: url('./assets/ATR-20240904T142512Z-001/libros.jpg'); /* Ruta a la imagen */
+  background-image: url('./assets/img/libros.jpg'); /* Ruta a la imagen */
   background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
   background-position: center; /* Centra la imagen */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -51,7 +51,7 @@ html, body {
 /* Botón de registro */
 .signup-button {
   position: absolute; /* Posiciona el botón de forma absoluta */
-  top: -55px; /* Espacio desde la parte superior */
+  top: -125px; /* Espacio desde la parte superior */
   right: 10px; /* Espacio desde la derecha */
   padding: 10px 20px; /* Ajuste de los márgenes internos */
   background-color: #751C1C; /* Color de fondo */

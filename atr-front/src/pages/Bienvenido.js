@@ -1,10 +1,21 @@
 import React from 'react';
-import backgroundImage from '../assets/ATR-20240904T142512Z-001/libros.jpg'; // Reemplaza con la ruta correcta de tu imagen de fondo
-import resumenesImage from '../assets/ATR-20240904T142512Z-001/Captura_de_pantalla_2024-08-28_195926-removebg-preview.png'; // Reemplaza con la imagen para "Resúmenes"
-import comunidadImage from '../assets/ATR-20240904T142512Z-001/comunidad.png'; // Reemplaza con la imagen para "Comunidad"
-import logoImage from '../assets/ATR-20240904T142512Z-001/logoatr.png'; // Reemplaza con la imagen de tu logo para el encabezado
+import { useNavigate } from 'react-router-dom';
+import backgroundImage from '../assets/img/libros.jpg';
+import resumenesImage from '../assets/img/resumenes.png';
+import comunidadImage from '../assets/img/comunidad.png';
+import logoImage from '../assets/img/logoatr.png';
 
 function Bienvenido() {
+  const navigate = useNavigate();
+
+  const handleResumenesClick = () => {
+    navigate('/resumenes');
+  };
+
+  const handleComunidadClick = () => {
+    navigate('/comunidad');
+  };
+
   return (
     <div
       style={{
@@ -19,7 +30,6 @@ function Bienvenido() {
         fontFamily: 'Comic Sans MS',
       }}
     >
-      {/* Encabezado con la imagen en el lateral izquierdo */}
       <div
         style={{
           width: '100%',
@@ -34,7 +44,6 @@ function Bienvenido() {
           backgroundColor: 'rgba(117, 28, 28)',
         }}
       >
-        {/* Imagen en el lateral izquierdo */}
         <img 
           src={logoImage} 
           alt="Logo" 
@@ -42,41 +51,65 @@ function Bienvenido() {
             marginTop:'2px',
             position: 'absolute',
             left: '20px',
-            width: '250px', // Ajusta el tamaño del logo
+            width: '250px',
           }}
         />
       </div>
- {/* Texto centrado */}
-      <h1 style={{ fontSize: '3rem', margin: '0', textAlign: 'center', shadow: '0px 4px 12px rgba(0, 0, 0, 0.3)'}}>
-          ¡Bienvenido/a de nuevo!
-        </h1>
-      {/* Contenedor de los botones e imágenes */}
+
+      <h1 style={{ fontSize: '3rem', margin: '0', textAlign: 'center', textShadow: '0px 4px 12px rgba(0, 0, 0, 0.3)'}}>
+        ¡Bienvenido/a de nuevo!
+      </h1>
+
       <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
-          width: '50%', 
-          marginTop: '100px', // Ajusta para que los botones queden más abajo
+          width: '50%',
+          marginTop: '100px',
         }}
       >
-        {/* Botón de Resúmenes */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <img 
             src={resumenesImage} 
             alt="Resúmenes" 
             style={{ width: '150px', marginBottom: '10px' }}
           />
-          <button style={{ padding: '10px 20px' }}>Resúmenes</button>
+          <button 
+            onClick={handleResumenesClick}
+            style={{ 
+              padding: '10px 20px',
+              cursor: 'pointer',
+              backgroundColor: '#4a1010',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              fontSize: '1.1rem'
+            }}
+          >
+            Resúmenes
+          </button>
         </div>
 
-        {/* Botón de Comunidad */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <img 
             src={comunidadImage} 
             alt="Comunidad" 
             style={{ width: '200px', marginBottom: '20px' }}
           />
-          <button style={{ padding: '10px 20px' }}>Comunidad</button>
+          <button 
+            onClick={handleComunidadClick}
+            style={{ 
+              padding: '10px 20px',
+              cursor: 'pointer',
+              backgroundColor: '#4a1010',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              fontSize: '1.1rem'
+            }}
+          >
+            Comunidad
+          </button>
         </div>
       </div>
     </div>

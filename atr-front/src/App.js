@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { useNavigate } from 'react-router-dom';
 import './App.css';
-import Bienvenido from './components/Bienvenido'
-import Inicio from './components/Inicio';
-import profilePic from './assets/ATR-20240904T142512Z-001/einstein.png'; // Importa la imagen
-import logo from './assets/ATR-20240904T142512Z-001/logoatr.png'; // Asegúrate de que la ruta sea correcta
+import profilePic from './assets/img/einstein.png';
+import logo from './assets/img/logoatr.png';
 
 function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate(); // Usa useNavigate para redirigir
+  const navigate = useNavigate();
   
   const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
@@ -25,44 +22,27 @@ function App() {
       return;
     }
     setEmailError('');
-    setIsLoggedIn(true);
+    // En lugar de cambiar isLoggedIn, navegamos directamente a /bienvenido
+    navigate('/bienvenido');
   };
 
   const handleRegisterClick = () => {
-    navigate('/register'); // Redirige a la página de registro
+    navigate('/registro');
   };
-
-  if (isLoggedIn) { 
-    return (
-      <div className="App">
-        {isLoggedIn ? (
-          <Bienvenido />
-        ) : (
-          <Inicio setIsLoggedIn={setIsLoggedIn} />
-        )}
-      
-      </div>
-    );
-  }
 
   return (
     <div className="login-container">
-      {/* Contenedor del encabezado y el botón */}
       <div className="header-container">
-        {/* Botón de registro encima del encabezado */}
         <button className="signup-button" onClick={handleRegisterClick}>Registrarse</button>
-        {/* Encabezado */}
         <div className="header">
-         <img src={logo} alt="Logo ATR" className="header-logo" />
-      </div>
+          <img src={logo} alt="Logo ATR" className="header-logo" />
+        </div>
       </div>
 
-      {/* Imagen de perfil */}
       <div className="profile-picture">
-        <img src={profilePic} alt="Profile" /> {/* Usa la imagen importada */}
+        <img src={profilePic} alt="Profile" />
       </div>
 
-      {/* Formulario de inicio de sesión */}
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Gmail:</label>
