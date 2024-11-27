@@ -1,9 +1,14 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import App from './App';
+import { BrowserRouter } from 'react-router-dom';
+
+const renderWithRouter = (ui) => {
+  return render(<BrowserRouter>{ui}</BrowserRouter>);
+};
 
 test('renders the login form correctly', () => {
-  render(<App />);
+  renderWithRouter(<App />);
 
   // Verificar que los campos de correo y contraseña se renderizan
   expect(screen.getByLabelText(/gmail/i)).toBeInTheDocument();
@@ -12,7 +17,7 @@ test('renders the login form correctly', () => {
 });
 
 test('shows error for invalid email', () => {
-  render(<App />);
+  renderWithRouter(<App />);
 
   // Simular la entrada de un email inválido
   fireEvent.change(screen.getByLabelText(/gmail/i), { target: { value: 'correo-invalido' } });
@@ -23,7 +28,7 @@ test('shows error for invalid email', () => {
 });
 
 test('logs in with valid email', async () => {
-  render(<App />);
+  renderWithRouter(<App />);
 
   // Simular la entrada de un correo válido y contraseña
   fireEvent.change(screen.getByLabelText(/gmail/i), { target: { value: 'usuario@gmail.com' } });

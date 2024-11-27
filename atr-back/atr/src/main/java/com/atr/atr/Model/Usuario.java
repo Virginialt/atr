@@ -10,22 +10,33 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
 
+    @Column(nullable = false)
     private String nombre;
+
+    @Column(nullable = false)
     private String apellido;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String contraseña;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Rol rol;
 
+    @Column(nullable = false)
     private Long carreraId;
+
+    @Column(nullable = false)
     private Integer año;
 
-    // Enum para roles
     public enum Rol {
         ESTUDIANTE,
         TUTOR
     }
+    
     public Long getIdUsuario() {
         return idUsuario;
     }

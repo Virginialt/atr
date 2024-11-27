@@ -51,6 +51,22 @@
             <artifactId>jakarta.validation-api</artifactId>
             <version>3.0.2</version>
         </dependency>
+
+        <!-- Implementación de la API de validación -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.1.Final</version>
+            <scope>test</scope>
+        </dependency>
+
+            <!-- Dependencia para Validación de Hibernate (Requerida para las pruebas) -->
+    <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>javax.el</artifactId>
+        <version>3.0.0</version>
+        <scope>test</scope>
+    </dependency>
         
         <!-- MapStruct -->
         <dependency>

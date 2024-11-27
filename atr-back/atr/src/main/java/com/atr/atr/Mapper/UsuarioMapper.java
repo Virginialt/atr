@@ -20,13 +20,14 @@ public class UsuarioMapper {
         return usuario;
     }
     public static UsuarioDTO toDto(Usuario entity) {
-        UsuarioDTO dto = new UsuarioDTO();
-        dto.setNombre(entity.getNombre());
-        dto.setEmail(entity.getEmail());
-        dto.setApellido(entity.getApellido());
-        dto.setCarreraId(entity.getCarreraId());;
-        dto.setRol(entity.getRol());
-        dto.setAño(entity.getAño());
-        return dto;
-    }
+    UsuarioDTO dto = new UsuarioDTO();
+    dto.setNombre(entity.getNombre());
+    dto.setApellido(entity.getApellido());
+    dto.setEmail(entity.getEmail());
+    dto.setCarreraId(entity.getCarreraId());
+    dto.setRol(entity.getRol().name()); // Convertimos Rol a String
+    dto.setAño(entity.getAño());
+    return dto;
+}
+
 }
