@@ -1,23 +1,13 @@
-/* Restablecer márgenes por defecto */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
 }
-/* Contenedor para el encabezado y el botón */
-.header-container {
-  width: 100%; /* Ocupa todo el ancho del contenedor */
-  position: relative; /* Posiciona el contenedor de forma relativa */
-  padding: 0; /* Asegúrate de que no haya relleno adicional */
-  margin: 0; /* Elimina cualquier margen adicional */
-}
 
-
-/* Ajustes del encabezado */
 .header {
   width: 100%;
   background-color: #751C1C;
-  padding: 8px;
+  padding: 12px 20px;
   box-sizing: border-box;
   margin: 0;
   position: fixed;
@@ -25,104 +15,105 @@ html, body {
   left: 0;
   z-index: 1000;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
-  display: flex; /* Flexbox para alinear la imagen */
+  display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
-/* Imagen dentro del encabezado */
 .header-logo {
-  margin-top:'2px';
-  left: 60px;
-  width: 200px; /* Ajusta el tamaño de la imagen según lo necesites */
+  width: 200px;
   height: auto;
 }
-/* Contenedor principal */
+
+.signup-button {
+  padding: 10px 24px;
+  background-color: white;
+  color: #751C1C;
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signup-button:hover {
+  background-color: #f0f0f0;
+}
+
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-image: url('./assets/img/libros.jpg'); /* Ruta a la imagen */
-  background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
-  background-position: center; /* Centra la imagen */
-  background-repeat: no-repeat; /* Evita que la imagen se repita */
-}
-/* Botón de registro */
-.signup-button {
-  position: absolute; /* Posiciona el botón de forma absoluta */
-  top: -125px; /* Espacio desde la parte superior */
-  right: 10px; /* Espacio desde la derecha */
-  padding: 10px 20px; /* Ajuste de los márgenes internos */
-  background-color: #751C1C; /* Color de fondo */
-  color: white;
-  font-size: 16px; /* Tamaño de la fuente */
-  font-family: 'Open Sans', sans-serif; /* Fuente específica */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  z-index: 2000; /* Asegúrate de que el botón esté por encima del encabezado */
+  background-image: url('./assets/img/libros.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* Imagen del perfil */
 .profile-picture img {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%; /* Redondea la imagen para hacerla circular */
-  margin-bottom: 20px; /* Espacio debajo de la imagen */
-  background-color: rgba(0, 0, 0, 0); /* Fondo transparente */
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin-bottom: 20px;
 }
 
-/* Formulario de inicio de sesión */
 .login-form {
   display: flex;
   flex-direction: column;
-  width: 350px; /* Ajustado para un tamaño más equilibrado */
-  padding: 20px;
+  width: 480px;
+  padding: 40px;
   background-color: white;
-  border-radius: 8px; /* Bordes más redondeados */
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Sombra más suave */
+  border-radius: 12px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.35);
 }
 
-/* Espaciado entre grupos de formulario */
 .form-group {
-  margin-bottom: 20px; /* Espacio más amplio entre campos */
+  margin-bottom: 20px;
 }
 
-/* Estilo de las etiquetas de los campos de formulario */
 .form-group label {
-  margin-bottom: 8px; /* Espacio debajo de la etiqueta */
-  margin-top: 5px;
-  margin-left: 5px; /* Espacio a la izquierda de la etiqueta */
+  display: block;
+  margin-bottom: 6px;
   font-weight: bold;
-  font-family: 'Open Sans', sans-serif; /* Cambia la fuente aquí */
-  font-size: 16px; /* Tamaño de fuente opcional */
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  color: #333;
 }
 
-/* Estilo de los campos de entrada */
 .form-group input {
-  width: calc(100% - 20px); /* Ajusta el ancho para tener en cuenta los márgenes */
-  padding: 6px; /* Espacio interno aumentado */
-  font-size: 15px; /* Tamaño de fuente más grande para mejor legibilidad */
-  border: 1px solid #575252; /* Color del borde */
-  border-radius: 5px; /* Bordes redondeados */
-  margin-left: 2px; /* Espacio a la izquierda del campo */
-  margin-right: 5px; /* Espacio a la derecha del campo */
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
-/* Estilo de los botones */
+.form-group input:focus {
+  border-color: #751C1C;
+}
+
 button {
-  padding: 12px; /* Espacio interno aumentado */
-  font-size: 18px; /* Tamaño de fuente más grande */
+  padding: 14px;
+  font-size: 17px;
   color: white;
-  background-color: #751C1C; /* Color de fondo */
+  background-color: #4a1010;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  font-family: 'Open Sans', sans-serif; /* Fuente de los botones */
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
 }
 
-/* Estilo para el manejo de errores */
+button:hover {
+  background-color: #3a0c0c;
+}
+
 .error {
   color: red;
   font-size: 0.9em;

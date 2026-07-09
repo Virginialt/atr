@@ -1,20 +1,31 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App';
 import Registro from './pages/Registro';
 import Resumenes from './pages/Resumenes';
 import Comunidad from './pages/Comunidad';
 import Bienvenido from './pages/Bienvenido';
+import Foro from './pages/Foro';
+import ForoDetalle from './pages/ForoDetalle';
+import Grupos from './pages/Grupos';
+import GrupoDetalle from './pages/GrupoDetalle';
+import Mensajes from './pages/Mensajes';
 
 function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<Bienvenido />} />
+        <Route path="/login" element={<App />} />
         <Route path="/registro" element={<Registro />} />
-        <Route path="/bienvenido" element={<Bienvenido />} />
         <Route path="/resumenes" element={<Resumenes />} />
         <Route path="/comunidad" element={<Comunidad />} />
+        <Route path="/foro" element={<Foro />} />
+        <Route path="/foro/:id" element={<ForoDetalle />} />
+        <Route path="/grupos" element={<Grupos />} />
+        <Route path="/grupos/:id" element={<GrupoDetalle />} />
+        <Route path="/mensajes" element={<Mensajes />} />
+        <Route path="/mensajes/:contactoId" element={<Mensajes />} />
       </Routes>
     </BrowserRouter>
   );

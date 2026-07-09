@@ -63,28 +63,15 @@ const Comunidad = () => {
         backgroundSize: 'cover',
         minHeight: '100vh',
         color: 'white',
-        fontFamily: 'Comic Sans MS',
+        fontFamily: 'Open Sans, sans-serif',
       }}
     >
-      {/* Header */}
-      <div
-        style={{
-          width: '100%',
-          backgroundColor: 'rgba(117, 28, 28)',
-          padding: '20px',
-          position: 'fixed',
-          top: 0,
-          zIndex: 1000,
-        }}
-      >
-        <img 
-          src={logoImage} 
-          alt="Logo" 
-          style={{
-            width: '250px',
-            marginLeft: '20px',
-          }}
-        />
+      <div style={{
+        width: '100%', backgroundColor: 'rgba(117, 28, 28)', padding: '20px',
+        position: 'fixed', top: 0, zIndex: 1000,
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+      }}>
+        <img src={logoImage} alt="Logo" style={{ width: '200px', marginLeft: '10px' }} />
       </div>
 
       {/* Contenido principal */}
@@ -188,12 +175,13 @@ const Comunidad = () => {
                 style={{
                   backgroundColor: '#4a1010',
                   color: 'white',
-                  padding: '10px',
+                  padding: '12px',
                   border: 'none',
-                  borderRadius: '5px',
+                  borderRadius: '6px',
                   cursor: 'pointer',
                   marginTop: '10px',
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  fontSize: '15px'
                 }}
               >
                 Contactar
