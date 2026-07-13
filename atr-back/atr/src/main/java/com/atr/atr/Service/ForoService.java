@@ -45,10 +45,12 @@ public class ForoService {
         return toDto(foro);
     }
 
-    public List<ForoDto> listarForos(Long materiaId, String busqueda) {
+    public List<ForoDto> listarForos(Long materiaId, String busqueda, Long usuarioId) {
         List<Foro> foros;
 
-        if (materiaId != null && busqueda != null && !busqueda.isBlank()) {
+        if (usuarioId != null) {
+            foros = foroRepository.findByUsuario_IdUsuarioAndEstado(usuarioId, Foro.Estado.ACTIVO);
+        } else if (materiaId != null && busqueda != null && !busqueda.isBlank()) {
             foros = foroRepository.findByMateriaIdAndTituloContainingIgnoreCaseAndEstado(materiaId, busqueda, Foro.Estado.ACTIVO);
         } else if (materiaId != null) {
             foros = foroRepository.findByMateriaIdAndEstado(materiaId, Foro.Estado.ACTIVO);
@@ -64,6 +66,25 @@ public class ForoService {
     public ForoDto obtenerForo(Long id) {
         Foro foro = foroRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Foro no encontrado"));
+        return toDto(foro);
+    }
+
+    @Transactional
+    public ForoDto actualizarForo(Long id, CrearForoRequest request, String email) {
+        Foro foro = foroRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Foro no encontrado"));
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        if (!foro.getUsuario().getIdUsuario().equals(usuario.getIdUsuario())) {
+            throw new RuntimeException("No puedes editar un hilo que no te pertenece");
+        }
+        if (request.getTitulo() != null) foro.setTitulo(request.getTitulo());
+        if (request.getContenido() != null) foro.setContenido(request.getContenido());
+        if (request.getMateriaId() != null) {
+            Materia materia = materiaRepository.findById(request.getMateriaId())
+                .orElseThrow(() -> new RuntimeException("Materia no encontrada"));
+            foro.setMateria(materia);
+        }
+        foro = foroRepository.save(foro);
         return toDto(foro);
     }
 
@@ -112,6 +133,19 @@ public class ForoService {
         comentario.setUsuario(usuario);
         comentario.setContenido(request.getContenido());
 
+        comentario = comentarioRepository.save(comentario);
+        return toComentarioDto(comentario);
+    }
+
+    @Transactional
+    public ComentarioDto actualizarComentario(Long comentarioId, CrearComentarioRequest request, String email) {
+        ComentarioForo comentario = comentarioRepository.findById(comentarioId)
+            .orElseThrow(() -> new RuntimeException("Comentario no encontrado"));
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        if (!comentario.getUsuario().getIdUsuario().equals(usuario.getIdUsuario())) {
+            throw new RuntimeException("No puedes editar un comentario que no te pertenece");
+        }
+        if (request.getContenido() != null) comentario.setContenido(request.getContenido());
         comentario = comentarioRepository.save(comentario);
         return toComentarioDto(comentario);
     }

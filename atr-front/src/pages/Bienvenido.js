@@ -5,7 +5,7 @@ import resumenesImage from '../assets/img/resumenes.png';
 import comunidadImage from '../assets/img/comunidad.png';
 import foroImage from '../assets/img/foro.png';
 import tutoresImage from '../assets/img/tutores.png';
-import logoImage from '../assets/img/logoatr.png';
+import Header from '../components/Header';
 import { isAuthenticated, logout } from '../api';
 
 function Bienvenido() {
@@ -29,88 +29,57 @@ function Bienvenido() {
         fontFamily: 'Open Sans, sans-serif',
       }}
     >
-      <div style={{
-        width: '100%', backgroundColor: 'rgba(117, 28, 28)', padding: '20px',
-        position: 'fixed', top: 0, zIndex: 1000,
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center'
-      }}>
-        <img src={logoImage} alt="Logo" style={{ width: '200px', marginLeft: '10px' }} />
-        {loggedIn ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '10px' }}>
+      <Header
+        rightContent={loggedIn ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ color: 'white', fontSize: '14px' }}>{user.nombre || user.email}</span>
-            <button onClick={logout}
-              style={{ padding: '8px 18px', backgroundColor: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>
+            <button onClick={() => navigate('/perfil')} className="btn btn-sm" style={{ background: 'rgba(255,255,255,0.15)' }}>
+              Perfil
+            </button>
+            <button onClick={logout} className="btn btn-sm" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)' }}>
               Cerrar sesión
             </button>
           </div>
         ) : (
-          <button onClick={() => navigate('/login')}
-            style={{ padding: '10px 24px', backgroundColor: 'white', color: '#751C1C', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px', marginRight: '10px' }}>
+          <button onClick={() => navigate('/login')} className="header-btn-white">
             Iniciar sesión
           </button>
         )}
-      </div>
+      />
 
-      <h1 style={{ fontSize: '2.6rem', margin: '0', textAlign: 'center', textShadow: '0px 4px 12px rgba(0, 0, 0, 0.4)'}}>
+      <h1 style={{ fontSize: '2.6rem', margin: 0, textAlign: 'center', textShadow: '0 4px 12px rgba(0,0,0,0.4)', animation: 'slideUp 0.4s ease' }}>
         {loggedIn ? '¡Bienvenido/a de nuevo!' : 'Bienvenido/a a A Todo Resumen'}
       </h1>
 
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '30px',
-          width: '90%',
-          marginTop: '90px',
-        }}
-      >
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          backgroundColor: 'rgba(0,0,0,0.5)', padding: '20px 24px',
-          borderRadius: '12px', backdropFilter: 'blur(4px)',
-        }}>
-          <img src={resumenesImage} alt="Resúmenes" style={{ width: '130px', marginBottom: '12px' }} />
-          <button onClick={() => irA('/resumenes')}
-            style={{ padding: '14px 32px', cursor: 'pointer', backgroundColor: '#4a1010', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.05rem', fontWeight: 'bold' }}>
-            Resúmenes
-          </button>
-        </div>
-
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          backgroundColor: 'rgba(0,0,0,0.5)', padding: '20px 24px',
-          borderRadius: '12px', backdropFilter: 'blur(4px)',
-        }}>
-          <img src={foroImage} alt="Foro" style={{ width: '130px', marginBottom: '12px' }} />
-          <button onClick={() => irA('/foro')}
-            style={{ padding: '14px 32px', cursor: 'pointer', backgroundColor: '#4a1010', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.05rem', fontWeight: 'bold' }}>
-            Foro
-          </button>
-        </div>
-
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          backgroundColor: 'rgba(0,0,0,0.5)', padding: '20px 24px',
-          borderRadius: '12px', backdropFilter: 'blur(4px)',
-        }}>
-          <img src={comunidadImage} alt="Grupos de Estudio" style={{ width: '130px', marginBottom: '12px' }} />
-          <button onClick={() => irA('/grupos')}
-            style={{ padding: '14px 32px', cursor: 'pointer', backgroundColor: '#4a1010', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.05rem', fontWeight: 'bold' }}>
-            Grupos de Estudio
-          </button>
-        </div>
-
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          backgroundColor: 'rgba(0,0,0,0.5)', padding: '20px 24px',
-          borderRadius: '12px', backdropFilter: 'blur(4px)',
-        }}>
-          <img src={tutoresImage} alt="Tutores" style={{ width: '130px', marginBottom: '12px' }} />
-          <button onClick={() => irA('/mensajes')}
-            style={{ padding: '14px 32px', cursor: 'pointer', backgroundColor: '#4a1010', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.05rem', fontWeight: 'bold' }}>
-            Tutores
-          </button>
-        </div>
+      <div style={{
+        display: 'flex', justifyContent: 'center', gap: '30px',
+        width: '90%', marginTop: '90px',
+        flexWrap: 'wrap',
+      }}>
+        {[
+          { img: resumenesImage, label: 'Resúmenes', route: '/resumenes' },
+          { img: foroImage, label: 'Foro', route: '/foro' },
+          { img: comunidadImage, label: 'Grupos de Estudio', route: '/grupos' },
+          { img: tutoresImage, label: 'Tutores', route: '/mensajes' },
+        ].map((item, i) => (
+          <div key={item.route}
+            style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              backgroundColor: 'rgba(0,0,0,0.5)', padding: '20px 24px',
+              borderRadius: '12px', backdropFilter: 'blur(4px)',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              cursor: 'pointer', animation: `slideUp 0.4s ease ${i * 0.08}s both`,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
+            onClick={() => irA(item.route)}
+          >
+            <img src={item.img} alt={item.label} style={{ width: '130px', marginBottom: '12px' }} />
+            <div className="btn btn-lg" style={{ pointerEvents: 'none' }}>
+              {item.label}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

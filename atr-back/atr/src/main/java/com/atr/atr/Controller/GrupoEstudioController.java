@@ -29,14 +29,17 @@ public class GrupoEstudioController {
     @GetMapping
     public ResponseEntity<List<GrupoEstudioDto>> listarGrupos(
             @RequestParam(required = false) Long materiaId,
+            @RequestParam(required = false) Long usuarioId,
             Authentication authentication) {
-        return ResponseEntity.ok(grupoService.listarGrupos(materiaId, authentication.getName()));
+        String email = (authentication != null) ? authentication.getName() : null;
+        return ResponseEntity.ok(grupoService.listarGrupos(materiaId, usuarioId, email));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GrupoEstudioDto> obtenerGrupo(@PathVariable Long id,
-                                                         Authentication authentication) {
-        return ResponseEntity.ok(grupoService.obtenerGrupo(id, authentication.getName()));
+                                                          Authentication authentication) {
+        String email = (authentication != null) ? authentication.getName() : null;
+        return ResponseEntity.ok(grupoService.obtenerGrupo(id, email));
     }
 
     @PostMapping("/{id}/unirse")

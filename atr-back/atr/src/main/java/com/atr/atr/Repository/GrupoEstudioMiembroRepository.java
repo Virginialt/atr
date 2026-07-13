@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface GrupoEstudioMiembroRepository extends JpaRepository<GrupoEstudioMiembro, Long> {
     List<GrupoEstudioMiembro> findByGrupoId(Long grupoId);
     
+    List<GrupoEstudioMiembro> findByUsuario_IdUsuario(Long usuarioId);
+
     @Query("SELECT gem FROM GrupoEstudioMiembro gem WHERE gem.grupo.id = :grupoId AND gem.usuario.idUsuario = :usuarioId")
     Optional<GrupoEstudioMiembro> findByGrupoIdAndUsuarioId(@Param("grupoId") Long grupoId, @Param("usuarioId") Long usuarioId);
     

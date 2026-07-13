@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logoImage from '../assets/img/logoatr.png';
 import backgroundImage from '../assets/img/libros.jpg';
 import SubirResumen from '../components/SubirResumen';
 import ResumenCard from '../components/ResumenCard';
 import ModalResumen from '../components/ModalResumen';
-import { isAuthenticated } from '../api';
-
-const API_BASE = 'http://localhost:8080/api/v1';
+import Header from '../components/Header';
+import { isAuthenticated, API_BASE } from '../api';
 
 const Resumenes = () => {
   const navigate = useNavigate();
@@ -59,26 +57,12 @@ const Resumenes = () => {
       backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover',
       minHeight: '100vh', color: 'white', fontFamily: 'Open Sans, sans-serif'
     }}>
-      <div style={{
-        width: '100%', backgroundColor: 'rgba(117, 28, 28)', padding: '20px',
-        position: 'fixed', top: 0, zIndex: 1000,
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center'
-      }}>
-        <img src={logoImage} alt="Logo" style={{ width: '200px', marginLeft: '10px' }} />
-        <button onClick={() => navigate('/bienvenido')}
-          style={{ background: 'rgba(255,255,255,0.12)', border: 'none', cursor: 'pointer', color: 'white', width: '38px', height: '38px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', marginRight: '10px', transition: 'background 0.15s' }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-      </div>
+      <Header />
 
-      <div style={{ paddingTop: '100px', padding: '120px 5% 50px 5%' }}>
+      <div style={{ padding: '95px 5% 50px', animation: 'fadeIn 0.3s ease' }}>
         {!mostrarSubir && (
           <button onClick={() => { if (isAuthenticated()) { setMostrarSubir(true); } else { navigate('/login'); } }}
-            style={{
-              padding: '14px 28px', backgroundColor: '#4a1010', color: 'white',
-              border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '1.05rem', fontWeight: 'bold',
-              marginBottom: '20px'
-            }}>
+            className="btn btn-lg" style={{ marginBottom: '20px' }}>
             + Subir resumen
           </button>
         )}
@@ -88,22 +72,18 @@ const Resumenes = () => {
                         onCancelar={() => setMostrarSubir(false)} />
         )}
 
-        <div style={{
-          backgroundColor: 'rgba(0,0,0,0.7)', padding: '20px', borderRadius: '10px', marginBottom: '30px'
-        }}>
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div className="filter-bar">
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
             <input type="text" placeholder="Buscar resúmenes..." value={busqueda}
               onChange={e => setBusqueda(e.target.value)}
-              style={{ padding: '10px', borderRadius: '5px', border: 'none', width: '300px' }} />
-            <select value={materiaFiltro} onChange={e => setMateriaFiltro(e.target.value)}
-              style={{ padding: '10px', borderRadius: '5px', border: 'none' }}>
+              style={{ width: '280px' }} />
+            <select value={materiaFiltro} onChange={e => setMateriaFiltro(e.target.value)}>
               <option value="">Todas las materias</option>
               {materias.map(m => (
                 <option key={m.id} value={m.id}>{m.nombre}</option>
               ))}
             </select>
-            <select value={orden} onChange={e => setOrden(e.target.value)}
-              style={{ padding: '10px', borderRadius: '5px', border: 'none' }}>
+            <select value={orden} onChange={e => setOrden(e.target.value)}>
               <option value="fecha_desc">Más recientes</option>
               <option value="fecha_asc">Más antiguos</option>
               <option value="puntaje_desc">Mejor puntuados</option>
@@ -113,21 +93,15 @@ const Resumenes = () => {
         </div>
 
         {cargando ? (
-          <div style={{ textAlign: 'center', fontSize: '1.2rem', padding: '60px 0' }}>
-            <div style={{
-              display: 'inline-block', width: '40px', height: '40px',
-              border: '4px solid rgba(255,255,255,0.3)',
-              borderTop: '4px solid white', borderRadius: '50%',
-              animation: 'spin 1s linear infinite', marginBottom: '16px'
-            }} />
-            <br />Cargando resúmenes...
-            <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+          <div className="empty-state">
+            <div className="spinner" />
+            <p style={{ marginTop: '16px' }}>Cargando resúmenes...</p>
           </div>
         ) : resumenes.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 0' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📚</div>
-            <p style={{ fontSize: '1.2rem', margin: 0 }}>No hay resúmenes todavía.</p>
-            <p style={{ fontSize: '1rem', color: '#ccc', marginTop: '8px' }}>¡Subí el primero!</p>
+          <div className="empty-state">
+            <div className="empty-state-icon">📚</div>
+            <p className="empty-state-title">No hay resúmenes todavía.</p>
+            <p className="empty-state-text">¡Subí el primero!</p>
           </div>
         ) : (
           <div style={{

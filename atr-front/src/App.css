@@ -1,20 +1,64 @@
+:root {
+  --primary: #751C1C;
+  --primary-dark: #4a1010;
+  --primary-hover: #3a0c0c;
+  --text-primary: #1a1a2e;
+  --text-secondary: #555;
+  --text-muted: #999;
+  --bg-overlay: rgba(0, 0, 0, 0.55);
+  --bg-card: rgba(255, 255, 255, 0.95);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.2);
+  --shadow-hover: 0 8px 28px rgba(0,0,0,0.18);
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(117, 28, 28, 0.18);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.32); }
+
+/* ── Headers ── */
 .header {
   width: 100%;
-  background-color: #751C1C;
+  background-color: var(--primary);
   padding: 12px 20px;
-  box-sizing: border-box;
   margin: 0;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -23,99 +67,289 @@ html, body {
 .header-logo {
   width: 200px;
   height: auto;
+  display: block;
 }
 
-.signup-button {
+/* ── Botones del header ── */
+.header-btn {
+  background: rgba(255,255,255,0.12);
+  border: none;
+  cursor: pointer;
+  color: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: background var(--transition-fast);
+}
+.header-btn:hover {
+  background: rgba(255,255,255,0.22);
+}
+
+.header-btn-white {
   padding: 10px 24px;
   background-color: white;
-  color: #751C1C;
-  font-size: 16px;
+  color: var(--primary);
+  font-size: 15px;
   font-family: 'Open Sans', sans-serif;
   font-weight: bold;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: background var(--transition-fast);
 }
-
-.signup-button:hover {
+.header-btn-white:hover {
   background-color: #f0f0f0;
 }
 
+/* ── Login ── */
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   background-image: url('./assets/img/libros.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.profile-picture img {
-  width: 200px;
-  height: 200px;
+.login-avatar {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  border: 3px solid white;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  width: 480px;
+  width: 440px;
+  max-width: 92%;
   padding: 40px;
   background-color: white;
-  border-radius: 12px;
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.35);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.35s ease;
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
+.login-form label {
   display: block;
   margin-bottom: 6px;
-  font-weight: bold;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  color: #333;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
 }
 
-.form-group input {
+.login-form input {
   width: 100%;
   padding: 12px 14px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
+  font-size: 15px;
+  border: 1.5px solid #ddd;
+  border-radius: var(--radius-sm);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.form-group input:focus {
-  border-color: #751C1C;
+.login-form input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(117, 28, 28, 0.12);
 }
 
-button {
-  padding: 14px;
-  font-size: 17px;
+/* ── Botones globales ── */
+.btn {
+  padding: 12px 24px;
+  font-size: 15px;
   color: white;
-  background-color: #4a1010;
+  background-color: var(--primary-dark);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-family: 'Open Sans', sans-serif;
   font-weight: bold;
+  font-family: 'Open Sans', sans-serif;
+  transition: all var(--transition-fast);
+}
+.btn:hover {
+  background-color: var(--primary-hover);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
-button:hover {
-  background-color: #3a0c0c;
+.btn-secondary {
+  background-color: #ccc;
+  color: #333;
+}
+.btn-secondary:hover {
+  background-color: #bbb;
 }
 
-.error {
-  color: red;
+.btn-danger {
+  background-color: #a00;
+}
+.btn-danger:hover {
+  background-color: #800;
+}
+
+.btn-warning {
+  background-color: #856404;
+}
+.btn-warning:hover {
+  background-color: #6b5203;
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 16px;
+}
+
+/* ── Cards ── */
+.card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  color: var(--text-primary);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-flat {
+  background-color: #f5f5f5;
+  border-radius: var(--radius-sm);
+  padding: 15px;
+}
+
+/* ── Tags / badges ── */
+.tag {
+  background-color: var(--primary-dark);
+  color: white;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  display: inline-block;
+}
+
+/* ── Overlay de búsqueda ── */
+.filter-bar {
+  background-color: var(--bg-overlay);
+  padding: 20px;
+  border-radius: var(--radius-md);
+  margin-bottom: 30px;
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 14px;
+  outline: none;
+}
+
+.filter-bar input:focus,
+.filter-bar select:focus {
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.15);
+}
+
+/* ── Estados vacíos y carga ── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255,255,255,0.8);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.empty-state-title {
+  font-size: 1.2rem;
+  margin: 0 0 8px;
+}
+
+.empty-state-text {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+}
+
+/* ── Spinner ── */
+.spinner {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255,255,255,0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ── Animaciones ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease;
+}
+.animate-slide-up {
+  animation: slideUp 0.3s ease;
+}
+
+/* ── Errores ── */
+.error-text {
+  color: #d32f2f;
   font-size: 0.9em;
-  margin-top: 5px;
+  margin: 5px 0;
+}
+
+/* ── Inputs comunes ── */
+.input {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid #ddd;
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  font-family: 'Open Sans', sans-serif;
+}
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(117, 28, 28, 0.12);
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 80px;
 }

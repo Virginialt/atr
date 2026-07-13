@@ -42,4 +42,10 @@ public class UsuarioController {
     public ResponseEntity<List<UsuarioDTO>> obtenerTutores() {
         return ResponseEntity.ok(usuarioService.obtenerTutores());
     }
+
+    @PutMapping
+    public ResponseEntity<UsuarioDTO> actualizarPerfil(@RequestBody UsuarioDTO usuarioDTO,
+                                                        Authentication authentication) {
+        return ResponseEntity.ok(usuarioService.actualizarPerfil(usuarioDTO, authentication.getName()));
+    }
 };

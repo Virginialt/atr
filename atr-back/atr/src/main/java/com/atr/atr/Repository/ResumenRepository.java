@@ -12,4 +12,5 @@ public interface ResumenRepository extends JpaRepository<Resumen, Long> {
     List<Resumen> findByMateriaIdAndEstado(Long materiaId, Resumen.Estado estado);
     List<Resumen> findByTituloContainingIgnoreCaseAndEstado(String titulo, Resumen.Estado estado);
     List<Resumen> findByMateriaIdAndTituloContainingIgnoreCaseAndEstado(Long materiaId, String titulo, Resumen.Estado estado);
+    List<Resumen> findByUsuario_IdUsuarioAndEstado(Long usuarioId, Resumen.Estado estado);
 }

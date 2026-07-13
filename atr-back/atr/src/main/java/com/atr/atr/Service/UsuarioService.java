@@ -44,4 +44,20 @@ public class UsuarioService {
         }
         return UsuarioMapper.toDto(usuario);
     }
+
+    public UsuarioDTO actualizarPerfil(UsuarioDTO dto, String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        if (usuario == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+        if (dto.getNombre() != null) usuario.setNombre(dto.getNombre());
+        if (dto.getApellido() != null) usuario.setApellido(dto.getApellido());
+        if (dto.getCarreraId() != null) usuario.setCarreraId(dto.getCarreraId());
+        if (dto.getAño() != null) usuario.setAño(dto.getAño());
+        if (dto.getContraseña() != null && !dto.getContraseña().isBlank()) {
+            usuario.setContraseña(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode(dto.getContraseña()));
+        }
+        usuario = usuarioRepository.save(usuario);
+        return UsuarioMapper.toDto(usuario);
+    }
 }

@@ -55,9 +55,14 @@ public class GrupoEstudioService {
         return toDto(grupo, email);
     }
 
-    public List<GrupoEstudioDto> listarGrupos(Long materiaId, String email) {
+    public List<GrupoEstudioDto> listarGrupos(Long materiaId, Long usuarioId, String email) {
         List<GrupoEstudio> grupos;
-        if (materiaId != null) {
+        if (usuarioId != null) {
+            grupos = miembroRepository.findByUsuario_IdUsuario(usuarioId).stream()
+                .map(m -> m.getGrupo())
+                .filter(g -> g.getEstado() == GrupoEstudio.Estado.ACTIVO)
+                .collect(Collectors.toList());
+        } else if (materiaId != null) {
             grupos = grupoRepository.findByMateriaIdAndEstado(materiaId, GrupoEstudio.Estado.ACTIVO);
         } else {
             grupos = grupoRepository.findByEstado(GrupoEstudio.Estado.ACTIVO);

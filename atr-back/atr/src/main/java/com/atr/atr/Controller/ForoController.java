@@ -29,13 +29,21 @@ public class ForoController {
     @GetMapping
     public ResponseEntity<List<ForoDto>> listarForos(
             @RequestParam(required = false) Long materiaId,
-            @RequestParam(required = false) String buscar) {
-        return ResponseEntity.ok(foroService.listarForos(materiaId, buscar));
+            @RequestParam(required = false) String buscar,
+            @RequestParam(required = false) Long usuarioId) {
+        return ResponseEntity.ok(foroService.listarForos(materiaId, buscar, usuarioId));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ForoDto> obtenerForo(@PathVariable Long id) {
         return ResponseEntity.ok(foroService.obtenerForo(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ForoDto> actualizarForo(@PathVariable Long id,
+                                                   @RequestBody CrearForoRequest request,
+                                                   Authentication authentication) {
+        return ResponseEntity.ok(foroService.actualizarForo(id, request, authentication.getName()));
     }
 
     @PutMapping("/{id}/cerrar")
@@ -61,6 +69,13 @@ public class ForoController {
                                                           Authentication authentication) {
         ComentarioDto comentario = foroService.crearComentario(id, request, authentication.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(comentario);
+    }
+
+    @PutMapping("/comentarios/{comentarioId}")
+    public ResponseEntity<ComentarioDto> actualizarComentario(@PathVariable Long comentarioId,
+                                                               @RequestBody CrearComentarioRequest request,
+                                                               Authentication authentication) {
+        return ResponseEntity.ok(foroService.actualizarComentario(comentarioId, request, authentication.getName()));
     }
 
     @DeleteMapping("/comentarios/{comentarioId}")

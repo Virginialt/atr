@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:8080/api/v1';
+import config from './config';
+
+export const API_BASE = config.API_BASE;
 
 function getToken() {
   return sessionStorage.getItem('token');

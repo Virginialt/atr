@@ -73,10 +73,12 @@ public class ResumenService {
         return toDto(resumen);
     }
 
-    public List<ResumenDto> listarResumenes(Long materiaId, String busqueda) {
+    public List<ResumenDto> listarResumenes(Long materiaId, String busqueda, Long usuarioId) {
         List<Resumen> resumenes;
 
-        if (materiaId != null && busqueda != null && !busqueda.isBlank()) {
+        if (usuarioId != null) {
+            resumenes = resumenRepository.findByUsuario_IdUsuarioAndEstado(usuarioId, Resumen.Estado.ACTIVO);
+        } else if (materiaId != null && busqueda != null && !busqueda.isBlank()) {
             resumenes = resumenRepository.findByMateriaIdAndTituloContainingIgnoreCaseAndEstado(
                 materiaId, busqueda, Resumen.Estado.ACTIVO);
         } else if (materiaId != null) {
@@ -93,6 +95,31 @@ public class ResumenService {
     public ResumenDto obtenerResumen(Long id) {
         Resumen resumen = resumenRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Resumen no encontrado"));
+        return toDto(resumen);
+    }
+
+    @Transactional
+    public ResumenDto actualizarResumen(Long id, MultipartFile file, String titulo, String descripcion, Long materiaId, String email) {
+        Resumen resumen = resumenRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Resumen no encontrado"));
+
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        if (!resumen.getUsuario().getIdUsuario().equals(usuario.getIdUsuario())) {
+            throw new RuntimeException("No puedes editar un resumen que no te pertenece");
+        }
+
+        if (titulo != null) resumen.setTitulo(titulo);
+        if (descripcion != null) resumen.setDescripcion(descripcion);
+        if (materiaId != null) {
+            Materia materia = materiaRepository.findById(materiaId)
+                .orElseThrow(() -> new RuntimeException("Materia no encontrada"));
+            resumen.setMateria(materia);
+        }
+        if (file != null && !file.isEmpty()) {
+            resumen.setArchivoUrl(guardarArchivo(file));
+        }
+
+        resumen = resumenRepository.save(resumen);
         return toDto(resumen);
     }
 

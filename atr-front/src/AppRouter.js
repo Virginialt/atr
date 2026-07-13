@@ -10,6 +10,7 @@ import ForoDetalle from './pages/ForoDetalle';
 import Grupos from './pages/Grupos';
 import GrupoDetalle from './pages/GrupoDetalle';
 import Mensajes from './pages/Mensajes';
+import Perfil from './pages/Perfil';
 
 function AppRouter() {
   return (
@@ -26,6 +27,7 @@ function AppRouter() {
         <Route path="/grupos/:id" element={<GrupoDetalle />} />
         <Route path="/mensajes" element={<Mensajes />} />
         <Route path="/mensajes/:contactoId" element={<Mensajes />} />
+        <Route path="/perfil" element={<Perfil />} />
       </Routes>
     </BrowserRouter>
   );

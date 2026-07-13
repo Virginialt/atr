@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import logoImage from '../assets/img/logoatr.png';
 import backgroundImage from '../assets/img/libros.jpg';
-import defaultProfilePic from '../assets/img/einstein.png'; // Asegúrate de tener una imagen por defecto
+import defaultProfilePic from '../assets/img/einstein.png';
+import Header from '../components/Header';
 
 const Comunidad = () => {
   const [tutors, setTutors] = useState([]);
@@ -66,44 +66,21 @@ const Comunidad = () => {
         fontFamily: 'Open Sans, sans-serif',
       }}
     >
-      <div style={{
-        width: '100%', backgroundColor: 'rgba(117, 28, 28)', padding: '20px',
-        position: 'fixed', top: 0, zIndex: 1000,
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center'
-      }}>
-        <img src={logoImage} alt="Logo" style={{ width: '200px', marginLeft: '10px' }} />
-      </div>
+      <Header />
 
-      {/* Contenido principal */}
-      <div style={{ paddingTop: '100px', padding: '120px 5% 50px 5%' }}>
-        {/* Filtros y búsqueda */}
-        <div style={{ 
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-          padding: '20px',
-          borderRadius: '10px',
-          marginBottom: '30px'
-        }}>
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+      <div style={{ padding: '95px 5% 50px', animation: 'fadeIn 0.3s ease' }}>
+        <div className="filter-bar">
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
             <input
               type="text"
               placeholder="Buscar tutores..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                padding: '10px',
-                borderRadius: '5px',
-                border: 'none',
-                width: '300px'
-              }}
+              style={{ width: '280px' }}
             />
             <select
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
-              style={{
-                padding: '10px',
-                borderRadius: '5px',
-                border: 'none'
-              }}
             >
               <option value="all">Todas las materias</option>
               {allSubjects.map(subject => (
@@ -122,15 +99,8 @@ const Comunidad = () => {
           {filteredTutors.map(tutor => (
             <div
               key={tutor.id}
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                borderRadius: '10px',
-                padding: '20px',
-                color: 'black',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px'
-              }}
+              className="card"
+              style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
             >
               <img
                 src={tutor.photo}
@@ -146,18 +116,7 @@ const Comunidad = () => {
               <h3 style={{ margin: '10px 0', textAlign: 'center' }}>{tutor.name}</h3>
               <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
                 {tutor.subjects.map(subject => (
-                  <span
-                    key={subject}
-                    style={{
-                      backgroundColor: '#4a1010',
-                      color: 'white',
-                      padding: '5px 10px',
-                      borderRadius: '15px',
-                      fontSize: '0.8em'
-                    }}
-                  >
-                    {subject}
-                  </span>
+                  <span key={subject} className="tag" style={{ padding: '5px 10px' }}>{subject}</span>
                 ))}
               </div>
               <p style={{ margin: '5px 0' }}>{tutor.description}</p>
@@ -170,20 +129,7 @@ const Comunidad = () => {
                 <span>⭐ {tutor.rating}</span>
                 <span>{tutor.price}</span>
               </div>
-              <button
-                onClick={() => handleContactClick(tutor.id)}
-                style={{
-                  backgroundColor: '#4a1010',
-                  color: 'white',
-                  padding: '12px',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  marginTop: '10px',
-                  fontWeight: 'bold',
-                  fontSize: '15px'
-                }}
-              >
+              <button onClick={() => handleContactClick(tutor.id)} className="btn" style={{ width: '100%' }}>
                 Contactar
               </button>
             </div>

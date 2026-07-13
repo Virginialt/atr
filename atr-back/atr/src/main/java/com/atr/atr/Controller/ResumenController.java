@@ -50,13 +50,26 @@ public class ResumenController {
     @GetMapping
     public ResponseEntity<List<ResumenDto>> listarResumenes(
             @RequestParam(required = false) Long materiaId,
-            @RequestParam(required = false) String buscar) {
-        return ResponseEntity.ok(resumenService.listarResumenes(materiaId, buscar));
+            @RequestParam(required = false) String buscar,
+            @RequestParam(required = false) Long usuarioId) {
+        return ResponseEntity.ok(resumenService.listarResumenes(materiaId, buscar, usuarioId));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResumenDto> obtenerResumen(@PathVariable Long id) {
         return ResponseEntity.ok(resumenService.obtenerResumen(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResumenDto> actualizarResumen(
+            @PathVariable Long id,
+            @RequestParam(required = false) MultipartFile file,
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String descripcion,
+            @RequestParam(required = false) Long materiaId,
+            Authentication authentication) {
+        ResumenDto resumen = resumenService.actualizarResumen(id, file, titulo, descripcion, materiaId, authentication.getName());
+        return ResponseEntity.ok(resumen);
     }
 
     @DeleteMapping("/{id}")

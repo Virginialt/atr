@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './App.css';
 import profilePic from './assets/img/einstein.png';
 import logo from './assets/img/logoatr.png';
-
-const API_BASE = 'http://localhost:8080/api/v1';
+import { API_BASE } from './api';
 
 function App() {
   const [email, setEmail] = useState('');
@@ -51,39 +50,37 @@ function App() {
     <div className="login-container">
       <div className="header">
         <img src={logo} alt="Logo ATR" className="header-logo" />
-        <button className="signup-button" onClick={handleRegisterClick}>Registrarse</button>
+        <button className="header-btn-white" onClick={handleRegisterClick}>Registrarse</button>
       </div>
 
-      <div className="profile-picture">
-        <img src={profilePic} alt="Profile" />
-      </div>
+      <img src={profilePic} alt="Profile" className="login-avatar" />
 
       <form className="login-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => { setEmail(e.target.value); setLoginError(''); }}
-            required
-          />
-          {emailError && <p className="error">{emailError}</p>}
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => { setPassword(e.target.value); setLoginError(''); }}
-            required
-          />
-        </div>
-        {loginError && <p className="error" style={{ color: 'red' }}>{loginError}</p>}
-        <button type="submit">Iniciar Sesión</button>
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); setLoginError(''); }}
+          required
+          style={{ marginBottom: '20px' }}
+        />
+        {emailError && <p className="error-text">{emailError}</p>}
+
+        <label htmlFor="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={(e) => { setPassword(e.target.value); setLoginError(''); }}
+          required
+          style={{ marginBottom: '24px' }}
+        />
+
+        {loginError && <p className="error-text" style={{ marginBottom: '12px' }}>{loginError}</p>}
+        <button type="submit" className="btn btn-lg">Iniciar Sesión</button>
       </form>
     </div>
   );

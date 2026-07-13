@@ -12,4 +12,5 @@ public interface ForoRepository extends JpaRepository<Foro, Long> {
     List<Foro> findByMateriaIdAndEstado(Long materiaId, Foro.Estado estado);
     List<Foro> findByTituloContainingIgnoreCaseAndEstado(String titulo, Foro.Estado estado);
     List<Foro> findByMateriaIdAndTituloContainingIgnoreCaseAndEstado(Long materiaId, String titulo, Foro.Estado estado);
+    List<Foro> findByUsuario_IdUsuarioAndEstado(Long usuarioId, Foro.Estado estado);
 }

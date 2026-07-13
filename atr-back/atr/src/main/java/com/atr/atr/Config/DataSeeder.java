@@ -29,7 +29,7 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        if (foroRepository.count() > 0) return;
+        if (grupoRepository.count() > 5) return;
 
         if (areaRepository.count() == 0 || materiaRepository.count() == 0) return;
 
@@ -60,17 +60,50 @@ public class DataSeeder implements CommandLineRunner {
         }
 
         if (matDiscreta != null && algoritmos != null) {
-            GrupoEstudio g1 = crearGrupo("Estudio Algebra", "Grupo para repasar algebra de Boole y preparar el parcial", matDiscreta, maria, 5);
+            GrupoEstudio g1 = crearGrupo("Estudio Algebra de Boole", "Grupo para repasar algebra de Boole y preparar el parcial. Resolvemos ejercicios juntos y compartimos material.", matDiscreta, maria, 5);
             if (g1 != null) {
                 agregarMiembro(g1, juan);
                 agregarMiembro(g1, ana);
                 crearEncuentro(g1, "Repaso general pre-parcial", "Biblioteca central - 2do piso", LocalDateTime.now().plusDays(5), maria);
             }
 
-            GrupoEstudio g2 = crearGrupo("Programacion 1 - Grupo de estudio", "Resolvemos ejercicios de algoritmos y estructuras de datos juntos", algoritmos, ana, 4);
+            GrupoEstudio g2 = crearGrupo("Algoritmos: Resolviendo juntos", "Resolvemos ejercicios de algoritmos y estructuras de datos. Desde pseudocodigo hasta implementacion.", algoritmos, ana, 4);
             if (g2 != null) {
                 agregarMiembro(g2, juan);
-                crearEncuentro(g2, "Meet de consulta", "Google Meet - link por privado", LocalDateTime.now().plusDays(3), ana);
+                crearEncuentro(g2, "Meet de consulta semanal", "Google Meet - link por privado", LocalDateTime.now().plusDays(3), ana);
+            }
+
+            GrupoEstudio g3 = crearGrupo("Matematica Discreta - Parcial 2", "Preparamos el segundo parcial de Matematica Discreta. Vemos relaciones, grafos y arboles.", matDiscreta, juan, 6);
+            if (g3 != null) {
+                agregarMiembro(g3, ana);
+                agregarMiembro(g3, maria);
+                crearEncuentro(g3, "Resolucion de parciales anteriores", "Aula 204 - UTN", LocalDateTime.now().plusDays(7), juan);
+                crearEncuentro(g3, "Teoria de grafos en la practica", "Laboratorio de informatica", LocalDateTime.now().plusDays(10), maria);
+            }
+        }
+
+        if (sistOrg != null && algoritmos != null) {
+            GrupoEstudio g4 = crearGrupo("TP Sistemas y Organizaciones", "Grupo para coordinar la entrega del TP final de Sistemas. Nos juntamos a definir los requisitos y la documentacion.", sistOrg, maria, 4);
+            if (g4 != null) {
+                agregarMiembro(g4, ana);
+                agregarMiembro(g4, juan);
+                crearEncuentro(g4, "Definicion de alcance del TP", "Biblioteca - Sector grupos", LocalDateTime.now().plusDays(2), maria);
+            }
+
+            GrupoEstudio g5 = crearGrupo("Programacion Competitiva", "Practicamos para competencias de programacion. Resolvemos problemas de plataformas como Codeforces y LeetCode.", algoritmos, carlos, 10);
+            if (g5 != null) {
+                agregarMiembro(g5, ana);
+                agregarMiembro(g5, maria);
+                agregarMiembro(g5, juan);
+                crearEncuentro(g5, "Maraton de programacion semanal", "Labo 3 - Piso 1", LocalDateTime.now().plusDays(1), carlos);
+            }
+
+            GrupoEstudio g6 = crearGrupo("Estudio general - 1er año", "Grupo abierto para estudiantes de 1er año. Compartimos apuntes, resolvemos dudas y organizamos sesiones de estudio.", matDiscreta, ana, 12);
+            if (g6 != null) {
+                agregarMiembro(g6, juan);
+                agregarMiembro(g6, maria);
+                crearEncuentro(g6, "Meet semanal de consultas", "Discord - servidor del grupo", LocalDateTime.now().plusDays(6), ana);
+                crearEncuentro(g6, "Maraton de ejercicios de parcial", "Aula 101", LocalDateTime.now().plusDays(12), juan);
             }
         }
 
@@ -96,6 +129,19 @@ public class DataSeeder implements CommandLineRunner {
         crearMensaje(ana, maria, "Hola Maria! Si, me vendria muy bien. Tengo dudas con los diagramas de Venn.");
         crearMensaje(maria, ana, "Podemos encontrarnos este jueves en la biblioteca a las 15hs. Llevo ejercicios para practicar.");
         crearMensaje(ana, maria, "Perfecto, nos vemos alli! Muchas gracias.");
+
+        crearMensaje(carlos, juan, "Hola Juan! Soy Carlos, tutor de Algoritmos. Vi tu consulta sobre el TP, cualquier cosa avisame.");
+        crearMensaje(juan, carlos, "Hola Carlos! Gracias por escribirme. Justo estaba con una duda sobre el pseudocodigo del ejercicio 4.");
+        crearMensaje(carlos, juan, "Dale, contame cual es exactamente. El de ordenamiento o el de busqueda?");
+        crearMensaje(juan, carlos, "El de busqueda binaria. No me queda claro cuando usar 'mientras' en vez de 'para'.");
+        crearMensaje(carlos, juan, "Ah, buen punto! En busqueda binaria usamos 'mientras' porque no sabemos cuantas iteraciones vamos a necesitar. 'Para' se usa cuando conocemos la cantidad exacta.");
+        crearMensaje(juan, carlos, "Ahora entendi! Muchas gracias Carlos, me re ayudaste.");
+        crearMensaje(carlos, juan, "De nada! Cualquier cosa segui consultando. Suerte con el TP.");
+
+        crearMensaje(maria, juan, "Hola Juan! Te queria consultar si ya viste el material que subi sobre Algebra de Boole.");
+        crearMensaje(juan, maria, "Hola Maria! Si, lo vi. Me parecio muy claro, sobre todo la parte de simplificacion.");
+        crearMensaje(maria, juan, "Me alegra! Si queres practicar mas, tengo ejercicios extra. Te los puedo pasar.");
+        crearMensaje(juan, maria, "Dale, acepto! Pasamelos cuando puedas.");
     }
 
     private Usuario crearUsuario(String nombre, String apellido, String email, String rol, Long carreraId, Integer anio) {
