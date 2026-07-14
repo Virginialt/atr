@@ -12,14 +12,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "materias")
+@Table(name = "materias",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"nombre", "area_id"}))
 public class Materia implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  // Clave primaria
 
-    @Column(name = "nombre", nullable = false, unique = true)
+    @Column(name = "nombre", nullable = false)
     @NotBlank(message = "El nombre de la materia no puede estar vacío")
     @Size(max = 100, message = "El nombre no puede exceder los 100 caracteres")
     private String nombre;  // Nombre de la materia

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import App from './App';
 import Registro from './pages/Registro';
 import Resumenes from './pages/Resumenes';
@@ -21,11 +21,12 @@ function AppRouter() {
         <Route path="/registro" element={<Registro />} />
         <Route path="/resumenes" element={<Resumenes />} />
         <Route path="/comunidad" element={<Comunidad />} />
+        <Route path="/tutores" element={<Comunidad />} />
         <Route path="/foro" element={<Foro />} />
         <Route path="/foro/:id" element={<ForoDetalle />} />
         <Route path="/grupos" element={<Grupos />} />
         <Route path="/grupos/:id" element={<GrupoDetalle />} />
-        <Route path="/mensajes" element={<Mensajes />} />
+        <Route path="/mensajes" element={<Navigate to="/tutores" replace />} />
         <Route path="/mensajes/:contactoId" element={<Mensajes />} />
         <Route path="/perfil" element={<Perfil />} />
       </Routes>

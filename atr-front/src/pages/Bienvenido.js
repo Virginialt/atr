@@ -60,7 +60,7 @@ function Bienvenido() {
           { img: resumenesImage, label: 'Resúmenes', route: '/resumenes' },
           { img: foroImage, label: 'Foro', route: '/foro' },
           { img: comunidadImage, label: 'Grupos de Estudio', route: '/grupos' },
-          { img: tutoresImage, label: 'Tutores', route: '/mensajes' },
+          { img: tutoresImage, label: 'Tutores', route: '/tutores' },
         ].map((item, i) => (
           <div key={item.route}
             style={{

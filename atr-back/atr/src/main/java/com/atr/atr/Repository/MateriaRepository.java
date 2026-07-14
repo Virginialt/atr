@@ -11,4 +11,6 @@ import com.atr.atr.Model.Materia;
 public interface MateriaRepository extends JpaRepository<Materia, Long> {
     List<Materia> findByEstado(Materia.Estado estado); // Método para listar materias activas
     boolean existsByNombre(String nombre);      // Verificar si una materia existe por nombre
+    List<Materia> findByNombreIgnoreCase(String nombre);
+    Materia findByNombreIgnoreCaseAndAreaId(String nombre, Long areaId);
 }

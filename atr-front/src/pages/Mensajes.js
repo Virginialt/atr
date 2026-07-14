@@ -2,19 +2,21 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import { api, isAuthenticated, API_BASE } from '../api';
+import bgImage from '../assets/img/libros.jpg';
+
+const COLORS = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#e67e22', '#34495e'];
 
 const Mensajes = () => {
   const navigate = useNavigate();
   const { contactoId } = useParams();
   const autenticado = isAuthenticated();
-  const [contactos, setContactos] = useState([]);
   const [tutores, setTutores] = useState([]);
   const [mensajes, setMensajes] = useState([]);
   const [nuevoMensaje, setNuevoMensaje] = useState('');
   const [chatUsuario, setChatUsuario] = useState(null);
-  const [mostrarTutores, setMostrarTutores] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const chatEndRef = useRef(null);
+  const msgsRef = useRef(null);
   const activeChatIdRef = useRef(null);
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
 
@@ -23,13 +25,7 @@ const Mensajes = () => {
       .then(r => r.ok ? r.json() : [])
       .then(setTutores)
       .catch(() => {});
-    if (autenticado) {
-      api('/mensajes/contactos')
-        .then(r => r.json())
-        .then(setContactos)
-        .catch(() => {});
-    }
-  }, [autenticado]);
+  }, []);
 
   const cargarMensajes = useCallback((id) => {
     if (!autenticado) return;
@@ -39,30 +35,16 @@ const Mensajes = () => {
   }, [autenticado]);
 
   useEffect(() => {
-    if (!contactoId) {
-      setChatUsuario(null);
-      setMensajes([]);
-      return;
-    }
     const id = parseInt(contactoId, 10);
-    cargarMensajes(id);
-  }, [contactoId, cargarMensajes]);
-
-  useEffect(() => {
-    if (!contactoId) return;
-    const id = parseInt(contactoId, 10);
-    if (activeChatIdRef.current === id) return;
-    activeChatIdRef.current = id;
-    const contacto = contactos.find(c => c.usuarioId === id);
-    if (contacto) {
-      setChatUsuario({ id, nombre: contacto.usuarioNombre });
-    } else {
-      const tutor = tutores.find(t => t.id === id);
-      if (tutor) {
-        setChatUsuario({ id, nombre: `${tutor.nombre} ${tutor.apellido}` });
-      }
+    if (activeChatIdRef.current !== id) {
+      activeChatIdRef.current = id;
+      cargarMensajes(id);
     }
-  }, [contactoId, contactos, tutores]);
+    const tutor = tutores.find(t => t.id === id);
+    if (tutor) {
+      setChatUsuario({ id, nombre: `${tutor.nombre} ${tutor.apellido}` });
+    }
+  }, [contactoId, tutores, cargarMensajes]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [mensajes]);
 
@@ -79,32 +61,12 @@ const Mensajes = () => {
         const msg = await r.json();
         setMensajes(prev => [...prev, msg]);
         setNuevoMensaje('');
-        api('/mensajes/contactos').then(res => res.json()).then(setContactos).catch(() => {});
       }
     } finally { setEnviando(false); }
   };
 
-  const iniciarChat = (id, nombre) => {
-    if (!autenticado) { navigate('/login'); return; }
-    setChatUsuario({ id, nombre });
-    setMostrarTutores(false);
-    cargarMensajes(id);
-    navigate(`/mensajes/${id}`, { replace: true });
-  };
-
-  const formatearFecha = (fechaStr) => {
-    const d = new Date(fechaStr);
-    const ahora = new Date();
-    const esHoy = d.toDateString() === ahora.toDateString();
-    if (esHoy) return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const ayer = new Date(ahora); ayer.setDate(ayer.getDate() - 1);
-    if (d.toDateString() === ayer.toDateString()) return 'Ayer';
-    return d.toLocaleDateString();
-  };
-
-  const formatearFechaCompleta = (fechaStr) => {
-    const d = new Date(fechaStr);
-    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formatearHora = (fechaStr) => {
+    return new Date(fechaStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   const getInitials = (nombre) => {
@@ -112,187 +74,173 @@ const Mensajes = () => {
     return nombre.split(' ').map(s => s[0]).join('').toUpperCase().slice(0, 2);
   };
 
+  const colorPara = (id) => COLORS[Math.abs(id) % COLORS.length];
+
+  const agruparPorDia = (msgs) => {
+    if (!msgs.length) return [];
+    const grupos = [];
+    let diaActual = '';
+    for (const m of msgs) {
+      const d = new Date(m.createdAt).toLocaleDateString();
+      if (d !== diaActual) {
+        diaActual = d;
+        grupos.push({ tipo: 'separador', fecha: d });
+      }
+      grupos.push(m);
+    }
+    return grupos;
+  };
+
+  const formatearSeparador = (fecha) => {
+    const hoy = new Date().toLocaleDateString();
+    const ayer = new Date(Date.now() - 86400000).toLocaleDateString();
+    if (fecha === hoy) return 'Hoy';
+    if (fecha === ayer) return 'Ayer';
+    return fecha;
+  };
+
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', fontFamily: 'Open Sans, sans-serif', paddingTop: '56px', boxSizing: 'border-box', backgroundColor: '#f0f0f0' }}>
+    <div style={{
+      height: '100vh', display: 'flex', flexDirection: 'column',
+      fontFamily: 'Open Sans, sans-serif', paddingTop: '56px', boxSizing: 'border-box',
+    }}>
       <Header />
 
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', maxWidth: '1200px', width: '100%', margin: '0 auto', boxShadow: '0 0 20px rgba(0,0,0,0.08)' }}>
-        <div style={{ width: '340px', backgroundColor: 'white', borderRight: '1px solid #e0e0e0', display: 'flex', flexDirection: 'column', overflow: 'hidden', flexShrink: 0 }}>
-          <div style={{ padding: '16px', borderBottom: '1px solid #e0e0e0' }}>
-            <h3 style={{ margin: '0 0 12px', color: '#1a1a2e', fontSize: '1.1rem' }}>Mensajes</h3>
-            {autenticado ? (
-              <button onClick={() => { setMostrarTutores(!mostrarTutores); }}
-                className="btn btn-sm" style={{ width: '100%' }}>
-                {mostrarTutores ? 'Cerrar tutores' : '+ Contactar un tutor'}
-              </button>
-            ) : (
-              <button onClick={() => navigate('/login')} className="btn btn-sm" style={{ width: '100%' }}>
-                Iniciá sesión para chatear
-              </button>
-            )}
+      <div style={{
+        flex: 1, display: 'flex', overflow: 'hidden',
+        backgroundImage: `url(${bgImage})`, backgroundSize: 'cover',
+      }}>
+        <div style={{
+          flex: 1, display: 'flex', flexDirection: 'column',
+          backdropFilter: 'blur(6px)', backgroundColor: 'rgba(255,255,255,0.75)',
+          maxWidth: '900px', margin: '0 auto',
+          boxShadow: '0 0 30px rgba(0,0,0,0.1)',
+        }}>
+          <div style={{
+            padding: '14px 20px', backgroundColor: 'white',
+            borderBottom: '1.5px solid #751C1C',
+            display: 'flex', alignItems: 'center', gap: '12px',
+          }}>
+            <button onClick={() => navigate('/tutores')}
+              style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#751C1C', padding: '4px 8px 4px 0', flexShrink: 0 }}>
+              ←
+            </button>
+            <div style={{
+              width: '40px', height: '40px', borderRadius: '50%',
+              background: chatUsuario ? colorPara(chatUsuario.id) : '#555',
+              color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 'bold', fontSize: '14px', flexShrink: 0,
+            }}>
+              {chatUsuario ? getInitials(chatUsuario.nombre) : '?'}
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontWeight: 600, fontSize: '15px', color: '#1a1a2e' }}>{chatUsuario ? chatUsuario.nombre : 'Cargando...'}</div>
+              <div style={{ fontSize: '12px', color: '#999' }}>
+                {mensajes.length > 0 ? `${mensajes.length} mensajes` : 'sin mensajes'}
+              </div>
+            </div>
           </div>
 
-          {mostrarTutores && (
-            <div style={{ borderBottom: '1px solid #e0e0e0', maxHeight: '240px', overflowY: 'auto' }}>
-              <div style={{ padding: '10px 16px', backgroundColor: '#fcf4f4', borderBottom: '1px solid #f0e0e0', fontWeight: 'bold', fontSize: '13px', color: '#751C1C' }}>Tutores disponibles</div>
-              {tutores.length === 0 ? (
-                <p style={{ padding: '16px', fontSize: '13px', color: '#888', textAlign: 'center' }}>No hay tutores disponibles</p>
-              ) : (
-                tutores.map(t => (
-                  <div key={t.id} onClick={() => iniciarChat(t.id, `${t.nombre} ${t.apellido}`)}
-                    style={{ padding: '10px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', transition: 'background 0.15s' }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f5f5f5'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = ''}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#751C1C', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '13px', flexShrink: 0 }}>
-                      {getInitials(`${t.nombre} ${t.apellido}`)}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '14px', fontWeight: '600', color: '#1a1a2e' }}>{t.nombre} {t.apellido}</div>
-                      <div style={{ fontSize: '12px', color: '#888', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.email}</div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-
-          <div style={{ flex: 1, overflowY: 'auto' }}>
-            {autenticado ? (
-              contactos.length === 0 ? (
-                <div style={{ padding: '30px 20px', textAlign: 'center', color: '#aaa', fontSize: '14px' }}>
-                  <div style={{ fontSize: '2rem', marginBottom: '12px' }}>💬</div>
-                  No tenés conversaciones aún.
-                  <br />Hacé clic en "Contactar un tutor" para empezar.
-                </div>
-              ) : (
-                contactos.map(c => {
-                  const activo = chatUsuario?.id === c.usuarioId;
+          <div ref={msgsRef} style={{
+            flex: 1, overflowY: 'auto', padding: '20px',
+            display: 'flex', flexDirection: 'column', gap: '2px',
+          }}>
+            {!chatUsuario ? (
+              <div className="spinner" style={{ margin: '60px auto' }} />
+            ) : mensajes.length === 0 ? (
+              <div style={{ textAlign: 'center', color: '#999', marginTop: '60px', padding: '20px' }}>
+                <div style={{ fontSize: '2.5rem', marginBottom: '12px', opacity: 0.5 }}>💬</div>
+                <p style={{ fontSize: '15px', margin: 0 }}>No hay mensajes aún.</p>
+                <p style={{ fontSize: '13px', margin: '6px 0 0' }}>Escribí algo para iniciar la conversación.</p>
+              </div>
+            ) : (
+              agruparPorDia(mensajes).map((item, idx) => {
+                if (item.tipo === 'separador') {
                   return (
-                    <div key={c.usuarioId} onClick={() => iniciarChat(c.usuarioId, c.usuarioNombre)}
-                      style={{
-                        padding: '12px 16px', cursor: 'pointer', borderBottom: '1px solid #f0f0f0',
-                        backgroundColor: activo ? '#f0e6e6' : 'white',
-                        transition: 'background 0.15s',
-                      }}
-                      onMouseEnter={e => { if (!activo) e.currentTarget.style.backgroundColor = '#f9f9f9'; }}
-                      onMouseLeave={e => { if (!activo) e.currentTarget.style.backgroundColor = 'white'; }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: activo ? '#751C1C' : '#555', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px', flexShrink: 0 }}>
-                          {getInitials(c.usuarioNombre)}
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: activo ? '700' : '600', fontSize: '14px', color: '#1a1a2e' }}>{c.usuarioNombre}</span>
-                            {c.ultimoMensaje && <span style={{ fontSize: '11px', color: '#999', whiteSpace: 'nowrap', marginLeft: '8px' }}>{formatearFecha(c.ultimoMensaje)}</span>}
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '3px' }}>
-                            <span style={{ fontSize: '13px', color: c.noLeidos > 0 ? '#1a1a2e' : '#888', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '200px' }}>
-                              {c.ultimoContenido || 'Sin mensajes'}
-                            </span>
-                            {c.noLeidos > 0 && (
-                              <span style={{ backgroundColor: '#751C1C', color: 'white', borderRadius: '10px', padding: '1px 7px', fontSize: '11px', fontWeight: 'bold', marginLeft: '6px', flexShrink: 0 }}>
-                                {c.noLeidos}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                    <div key={`sep-${idx}`} style={{
+                      display: 'flex', alignItems: 'center', gap: '12px',
+                      margin: '16px 0 8px',
+                    }}>
+                      <div style={{ flex: 1, height: '1px', background: 'rgba(0,0,0,0.06)' }} />
+                      <span style={{
+                        fontSize: '12px', color: '#999', fontWeight: 600,
+                        padding: '3px 12px', background: 'rgba(0,0,0,0.03)',
+                        borderRadius: '10px', whiteSpace: 'nowrap',
+                      }}>
+                        {formatearSeparador(item.fecha)}
+                      </span>
+                      <div style={{ flex: 1, height: '1px', background: 'rgba(0,0,0,0.06)' }} />
                     </div>
                   );
-                })
-              )
-            ) : (
-              <div style={{ padding: '30px 20px', textAlign: 'center', color: '#aaa', fontSize: '14px' }}>
-                <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>🔒</div>
-                <p style={{ marginBottom: '16px' }}>Iniciá sesión para ver tus conversaciones.</p>
-                <button onClick={() => navigate('/login')} className="btn">Iniciar sesión</button>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#f7f7f7' }}>
-          {!chatUsuario ? (
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '4rem', marginBottom: '16px', opacity: 0.4 }}>💬</div>
-                <p style={{ color: '#999', fontSize: '1.1rem' }}>Seleccioná un contacto para empezar a chatear</p>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div style={{ padding: '14px 20px', backgroundColor: 'white', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-                <div style={{ width: '38px', height: '38px', borderRadius: '50%', backgroundColor: '#751C1C', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '13px', flexShrink: 0 }}>
-                  {getInitials(chatUsuario.nombre)}
-                </div>
-                <div>
-                  <div style={{ fontWeight: 'bold', color: '#1a1a2e', fontSize: '15px' }}>{chatUsuario.nombre}</div>
-                  <div style={{ fontSize: '12px', color: '#888' }}>En línea</div>
-                </div>
-              </div>
-
-              <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {mensajes.length === 0 ? (
-                  <div style={{ textAlign: 'center', color: '#aaa', marginTop: '40px' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: '8px' }}>✉️</div>
-                    No hay mensajes aún. Escribí el primero.
-                  </div>
-                ) : (
-                  mensajes.map(m => {
-                    const esMio = m.remitenteId === user.id;
-                    return (
-                      <div key={m.id} style={{ display: 'flex', justifyContent: esMio ? 'flex-end' : 'flex-start', marginBottom: '4px' }}>
-                        {!esMio && (
-                          <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#555', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '11px', flexShrink: 0, marginRight: '8px', marginTop: '4px', alignSelf: 'flex-end' }}>
-                            {getInitials(chatUsuario.nombre)}
-                          </div>
-                        )}
-                        <div style={{ maxWidth: '65%' }}>
-                          <div style={{
-                            padding: '10px 16px', borderRadius: esMio ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                            backgroundColor: esMio ? '#751C1C' : 'white',
-                            color: esMio ? 'white' : '#1a1a2e',
-                            fontSize: '14px', lineHeight: '1.45',
-                            boxShadow: '0 1px 2px rgba(0,0,0,0.06)',
-                          }}>
-                            <p style={{ margin: 0 }}>{m.contenido}</p>
-                          </div>
-                          <div style={{ fontSize: '11px', color: '#999', marginTop: '3px', textAlign: esMio ? 'right' : 'left', paddingLeft: esMio ? 0 : '0', paddingRight: esMio ? 0 : '0' }}>
-                            {formatearFechaCompleta(m.createdAt)}
-                          </div>
-                        </div>
+                }
+                const esMio = item.remitenteId === user.id;
+                return (
+                  <div key={item.id} style={{
+                    display: 'flex',
+                    justifyContent: esMio ? 'flex-end' : 'flex-start',
+                    marginBottom: '4px',
+                    animation: 'fadeIn 0.2s ease',
+                  }}>
+                    <div style={{ maxWidth: '70%', display: 'flex', flexDirection: 'column', alignItems: esMio ? 'flex-end' : 'flex-start' }}>
+                      <div style={{
+                        padding: '10px 16px',
+                        borderRadius: esMio ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+                        background: esMio ? 'linear-gradient(135deg, #751C1C, #8a2222)' : 'white',
+                        color: esMio ? 'white' : '#1a1a2e',
+                        fontSize: '14px', lineHeight: '1.5',
+                        boxShadow: esMio ? '0 2px 8px rgba(117,28,28,0.2)' : '0 1px 3px rgba(0,0,0,0.06)',
+                      }}>
+                        <p style={{ margin: 0, wordBreak: 'break-word' }}>{item.contenido}</p>
                       </div>
-                    );
-                  })
-                )}
-                <div ref={chatEndRef} />
-              </div>
+                      <span style={{
+                        fontSize: '11px', color: '#aaa', marginTop: '2px',
+                        padding: '0 4px',
+                      }}>
+                        {formatearHora(item.createdAt)}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+            <div ref={chatEndRef} />
+          </div>
 
-              {autenticado ? (
-                <form onSubmit={handleEnviar} style={{ padding: '16px 20px', backgroundColor: 'white', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <input type="text" value={nuevoMensaje} onChange={e => setNuevoMensaje(e.target.value)} placeholder="Escribí un mensaje..."
-                    style={{ flex: 1, padding: '12px 18px', border: '1.5px solid #ddd', borderRadius: '24px', outline: 'none', fontSize: '15px', transition: 'border-color 0.15s' }}
-                    onFocus={e => e.target.style.borderColor = '#751C1C'}
-                    onBlur={e => e.target.style.borderColor = '#ddd'} />
-                  <button type="submit" disabled={enviando || !nuevoMensaje.trim()}
-                    style={{
-                      width: '44px', height: '44px', borderRadius: '50%', border: 'none',
-                      backgroundColor: (enviando || !nuevoMensaje.trim()) ? '#ccc' : '#751C1C',
-                      color: 'white', cursor: (enviando || !nuevoMensaje.trim()) ? 'default' : 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      transition: 'background 0.15s', flexShrink: 0,
-                    }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                  </button>
-                </form>
-              ) : (
-                <div style={{ padding: '16px 20px', backgroundColor: 'white', borderTop: '1px solid #e0e0e0', textAlign: 'center' }}>
-                  <button onClick={() => navigate('/login')} className="btn">
-                    Iniciá sesión para responder
-                  </button>
-                </div>
-              )}
-            </>
+          {autenticado ? (
+            <form onSubmit={handleEnviar} style={{
+              padding: '16px 20px',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.95), white)',
+              borderTop: '1px solid rgba(0,0,0,0.06)',
+              display: 'flex', gap: '10px', alignItems: 'center',
+            }}>
+              <input
+                type="text" value={nuevoMensaje} onChange={e => setNuevoMensaje(e.target.value)}
+                placeholder="Escribí un mensaje..."
+                style={{
+                  flex: 1, padding: '12px 18px',
+                  border: '1.5px solid #e0e0e0', borderRadius: '24px',
+                  outline: 'none', fontSize: '15px', transition: 'border-color 0.2s, box-shadow 0.2s',
+                  backgroundColor: '#f8f8f8',
+                }}
+                onFocus={e => { e.target.style.borderColor = '#751C1C'; e.target.style.boxShadow = '0 0 0 3px rgba(117,28,28,0.1)'; e.target.style.backgroundColor = 'white'; }}
+                onBlur={e => { e.target.style.borderColor = '#e0e0e0'; e.target.style.boxShadow = 'none'; e.target.style.backgroundColor = '#f8f8f8'; }} />
+              <button type="submit" disabled={enviando || !nuevoMensaje.trim()}
+                style={{
+                  width: '44px', height: '44px', borderRadius: '50%', border: 'none',
+                  background: (enviando || !nuevoMensaje.trim()) ? '#d0d0d0' : 'linear-gradient(135deg, #751C1C, #8a2222)',
+                  color: 'white', cursor: (enviando || !nuevoMensaje.trim()) ? 'default' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'all 0.2s', flexShrink: 0, boxShadow: (enviando || !nuevoMensaje.trim()) ? 'none' : '0 2px 8px rgba(117,28,28,0.3)',
+                }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </form>
+          ) : (
+            <div style={{ padding: '16px 20px', background: 'rgba(255,255,255,0.95)', borderTop: '1px solid rgba(0,0,0,0.06)', textAlign: 'center' }}>
+              <button onClick={() => navigate('/login')} className="btn">
+                Iniciá sesión para responder
+              </button>
+            </div>
           )}
         </div>
       </div>
